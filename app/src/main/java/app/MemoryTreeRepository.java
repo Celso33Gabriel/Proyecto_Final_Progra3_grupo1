@@ -1,4 +1,4 @@
-package gt.edu.umg.app.repository;
+package app;
 
 import java.util.HashMap;
 import java.util.Map;
