@@ -1,8 +1,7 @@
 package gt.edu.umg.app.repository;
 
 import gt.edu.umg.app.model.TreeNode;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -10,71 +9,67 @@ import java.util.*;
 @Repository
 public class PostgresTreeRepository implements TreeRepository {
 
-    private final JdbcTemplate jdbc;
-
-    public PostgresTreeRepository(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
-
-    private final RowMapper<TreeNode> nodeMapper = (rs, rowNum) ->
-            new TreeNode(
-                    rs.getString("id"),
-                    rs.getString("value"),
-                    rs.getString("parent_id")
-            );
+    @Autowired
+    private SpringDataTreeRepository jpaRepository;
 
     @Override
     public void createRoot(String id, String value) {
-        jdbc.update(
-                "INSERT INTO nodes(id, value, parent_id) VALUES (?, ?, NULL)",
-                id, value
-        );
+        TreeNode root = new TreeNode(id, value, null);
+        jpaRepository.save(root);
     }
 
     @Override
     public void addChild(String parentId, String id, String value) {
-        jdbc.update(
-                "INSERT INTO nodes(id, value, parent_id) VALUES (?, ?, ?)",
-                id, value, parentId
-        );
+        TreeNode child = new TreeNode(id, value, parentId);
+        jpaRepository.save(child);
     }
 
     @Override
     public TreeNode getFullTree() {
-        List<TreeNode> all = jdbc.query("SELECT * FROM nodes", nodeMapper);
+        List<TreeNode> all = jpaRepository.findAll();
         return buildTree(all);
     }
 
     @Override
     public TreeNode getSubtree(String nodeId) {
-        String sql = """
-            WITH RECURSIVE subtree AS (
-                SELECT * FROM nodes WHERE id = ?
-                UNION ALL
-                SELECT n.* FROM nodes n
-                INNER JOIN subtree s ON n.parent_id = s.id
-            )
-            SELECT * FROM subtree
-            """;
-        List<TreeNode> nodes = jdbc.query(sql, nodeMapper, nodeId);
-        return buildTree(nodes);
+        // Obtenemos todos los nodos usando JPA
+        List<TreeNode> allNodes = jpaRepository.findAll();
+        Map<String, TreeNode> map = new HashMap<>();
+        for (TreeNode n : allNodes) map.put(n.getId(), n);
+
+        // Buscamos el nodo que pidieron como raíz del subárbol
+        TreeNode rootOfSubtree = map.get(nodeId);
+        if (rootOfSubtree == null) return null;
+
+        // Limpiamos los hijos viejos para reconstruir solo las ramas que pertenecen a este subárbol
+        for (TreeNode n : allNodes) {
+            n.getChildren().clear();
+        }
+
+        // Reconstruimos las relaciones de hijos solo para este subárbol
+        for (TreeNode n : allNodes) {
+            if (n.getParentId() != null) {
+                TreeNode parent = map.get(n.getParentId());
+                if (parent != null) {
+                    parent.addChild(n);
+                }
+            }
+        }
+        return rootOfSubtree;
     }
 
     @Override
     public List<String> getPathFromRoot(String nodeId) {
-        String sql = """
-            WITH RECURSIVE path AS (
-                SELECT id, value, parent_id FROM nodes WHERE id = ?
-                UNION ALL
-                SELECT n.id, n.value, n.parent_id FROM nodes n
-                INNER JOIN path p ON n.id = p.parent_id
-            )
-            SELECT * FROM path
-            """;
-        List<TreeNode> nodes = jdbc.query(sql, nodeMapper, nodeId);
+        List<TreeNode> allNodes = jpaRepository.findAll();
+        Map<String, TreeNode> map = new HashMap<>();
+        for (TreeNode n : allNodes) map.put(n.getId(), n);
+
         List<String> path = new ArrayList<>();
-        for (int i = nodes.size() - 1; i >= 0; i--) {
-            path.add(nodes.get(i).getValue());
+        TreeNode current = map.get(nodeId);
+        
+        while (current != null) {
+            path.add(0, current.getValue()); // Lo inserta al inicio para mantener el orden correcto
+            current = (current.getParentId() != null) ? map.get(current.getParentId()) : null;
         }
         return path;
     }
@@ -86,18 +81,21 @@ public class PostgresTreeRepository implements TreeRepository {
 
     @Override
     public List<TreeNode> getAncestors(String nodeId) {
-        String sql = """
-            WITH RECURSIVE ancestors AS (
-                SELECT n.* FROM nodes n
-                INNER JOIN nodes child ON child.parent_id = n.id
-                AND child.id = ?
-                UNION ALL
-                SELECT n.* FROM nodes n
-                INNER JOIN ancestors a ON n.id = a.parent_id
-            )
-            SELECT * FROM ancestors
-            """;
-        return jdbc.query(sql, nodeMapper, nodeId);
+        List<TreeNode> allNodes = jpaRepository.findAll();
+        Map<String, TreeNode> map = new HashMap<>();
+        for (TreeNode n : allNodes) map.put(n.getId(), n);
+
+        List<TreeNode> ancestors = new ArrayList<>();
+        TreeNode current = map.get(nodeId);
+        
+        if (current != null && current.getParentId() != null) {
+            TreeNode parent = map.get(current.getParentId());
+            while (parent != null) {
+                ancestors.add(parent);
+                parent = (parent.getParentId() != null) ? map.get(parent.getParentId()) : null;
+            }
+        }
+        return ancestors;
     }
 
     @Override
@@ -131,7 +129,7 @@ public class PostgresTreeRepository implements TreeRepository {
 
     @Override
     public boolean validateNoCycles() {
-        List<TreeNode> all = jdbc.query("SELECT * FROM nodes", nodeMapper);
+        List<TreeNode> all = jpaRepository.findAll();
         Set<String> visited = new HashSet<>();
         for (TreeNode node : all) {
             if (!visited.contains(node.getId())) {
@@ -142,11 +140,14 @@ public class PostgresTreeRepository implements TreeRepository {
         return true;
     }
 
-    //  Métodos auxiliares privados
+    // ========== Métodos auxiliares privados organizados en memoria ==========
 
     private TreeNode buildTree(List<TreeNode> nodes) {
         Map<String, TreeNode> map = new HashMap<>();
-        for (TreeNode n : nodes) map.put(n.getId(), n);
+        for (TreeNode n : nodes) {
+            map.put(n.getId(), n);
+            n.getChildren().clear(); // Limpiamos listas viejas de memoria antes de enlazar
+        }
         TreeNode root = null;
         for (TreeNode n : nodes) {
             if (n.getParentId() == null) {
