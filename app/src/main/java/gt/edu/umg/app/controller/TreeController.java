@@ -2,6 +2,8 @@ package gt.edu.umg.app.controller;
 
 import gt.edu.umg.app.repository.TreeRepository;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import gt.edu.umg.app.model.TreeNode;
 
 @RestController
 @RequestMapping("/tree")
@@ -14,7 +16,7 @@ public class TreeController {
     }
 
     @GetMapping
-    public Object getTree() {
+    public List<TreeNode> getTree() {
         return repository.getFullTree();
     }
 
