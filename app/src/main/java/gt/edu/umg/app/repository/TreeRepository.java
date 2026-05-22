@@ -6,7 +6,7 @@ import java.util.List;
 public interface TreeRepository {
     void createRoot(String id, String value);
     void addChild(String parentId, String id, String value);
-    TreeNode getFullTree();
+    List<TreeNode> getFullTree();
     TreeNode getSubtree(String nodeId);
     List<String> getPathFromRoot(String nodeId);
     List<TreeNode> getDFS();

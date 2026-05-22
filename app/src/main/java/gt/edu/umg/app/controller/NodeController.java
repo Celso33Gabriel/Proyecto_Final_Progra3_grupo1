@@ -14,16 +14,16 @@ public class NodeController {
     }
 
     @PostMapping("/root")
-    public void createRoot(@RequestParam String id,
-                           @RequestParam String value) {
+    public void createRoot(@RequestParam("id") String id,
+                           @RequestParam("value") String value) {
 
         repository.createRoot(id, value);
     }
 
     @PostMapping("/{parentId}/children")
     public void addChild(@PathVariable String parentId,
-                         @RequestParam String id,
-                         @RequestParam String value) {
+                         @RequestParam("id") String id,
+                         @RequestParam("value") String value) {
 
         repository.addChild(parentId, id, value);
     }
