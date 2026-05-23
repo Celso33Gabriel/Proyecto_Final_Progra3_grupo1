@@ -2,12 +2,16 @@ package gt.edu.umg.app.repository;
 
 import gt.edu.umg.app.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
-import gt.edu.umg.app.repository.SpringDataTreeRepository;
 
 import java.util.*;
 
 @Repository
+@ConditionalOnProperty(
+        name = "app.storage",
+        havingValue = "postgres"
+)
 public class PostgresTreeRepository implements TreeRepository {
 
     @Autowired
