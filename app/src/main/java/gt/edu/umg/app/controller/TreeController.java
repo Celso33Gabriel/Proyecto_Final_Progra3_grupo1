@@ -21,12 +21,10 @@ public class TreeController {
     }
 
     @GetMapping("/traversal")
-    public Object traversal(@RequestParam String type) {
-
+    public Object traversal(@RequestParam("type") String type) {
         if (type.equalsIgnoreCase("DFS")) {
             return repository.getDFS();
         }
-
         return repository.getBFS();
     }
 
