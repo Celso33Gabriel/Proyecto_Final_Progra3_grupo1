@@ -1,0 +1,19 @@
+{
+  "info": {
+    "name": "Proyecto Progra3 - Grupo 1 - PostgreSQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {"name": "1. Crear Raiz", "request": {"method": "POST", "url": "http://localhost:8080/nodes/root?id=1&value=Tienda"}},
+    {"name": "2. Agregar Hijo", "request": {"method": "POST", "url": "http://localhost:8080/nodes/1/children?id=2&value=Electronica"}},
+    {"name": "3. Arbol Completo", "request": {"method": "GET", "url": "http://localhost:8080/tree"}},
+    {"name": "4. Subarbol", "request": {"method": "GET", "url": "http://localhost:8080/nodes/2/subtree"}},
+    {"name": "5. Ruta desde Raiz", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/path"}},
+    {"name": "6. Recorrido DFS", "request": {"method": "GET", "url": "http://localhost:8080/tree/traversal?type=DFS"}},
+    {"name": "7. Recorrido BFS", "request": {"method": "GET", "url": "http://localhost:8080/tree/traversal?type=BFS"}},
+    {"name": "8. Altura del Arbol", "request": {"method": "GET", "url": "http://localhost:8080/tree/height"}},
+    {"name": "9. Profundidad del Nodo", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/depth"}},
+    {"name": "10. Ancestros del Nodo", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/ancestors"}},
+    {"name": "11. Validar Ciclos", "request": {"method": "GET", "url": "http://localhost:8080/tree/validate"}}
+  ]
+}
