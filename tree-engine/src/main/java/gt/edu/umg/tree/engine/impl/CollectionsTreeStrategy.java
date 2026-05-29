@@ -1,28 +1,19 @@
 package gt.edu.umg.tree.engine.impl;
 
 import gt.edu.umg.tree.engine.TreeAlgorithmStrategy;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@ConditionalOnProperty(
-        name = "app.tree-strategy",
-        havingValue = "collections"
-)
-public class CollectionsTreeStrategy
-        implements TreeAlgorithmStrategy<Object> {
+public class CollectionsTreeStrategy implements TreeAlgorithmStrategy<Object> {
 
     @Override
     public void createRoot(Object value) {
-
+        // Lógica para crear la raíz usando colecciones estándar
     }
 
     @Override
     public void addChild(String parentId, Object value) {
-
+        // Lógica para añadir nodos hijos
     }
 
     @Override
@@ -40,13 +31,15 @@ public class CollectionsTreeStrategy
         return 0;
     }
 
-    @Override
-    public int getDepth(String nodeId) {
-        return 0;
-    }
+	@Override
+	public int getDepth(String nodeId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    @Override
-    public boolean validateNoCycles() {
-        return true;
-    }
+	@Override
+	public boolean validateNoCycles() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
