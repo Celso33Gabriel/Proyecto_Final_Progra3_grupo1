@@ -1,19 +1,97 @@
 {
   "info": {
     "name": "Proyecto Progra3 - Grupo 1 - PostgreSQL",
+    "description": "Colección completa de pruebas para el backend de gestión de árboles jerárquicos con persistencia PostgreSQL. Caso de uso: Categorías e-commerce.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
-    {"name": "1. Crear Raiz", "request": {"method": "POST", "url": "http://localhost:8080/nodes/root?id=1&value=Tienda"}},
-    {"name": "2. Agregar Hijo", "request": {"method": "POST", "url": "http://localhost:8080/nodes/1/children?id=2&value=Electronica"}},
-    {"name": "3. Arbol Completo", "request": {"method": "GET", "url": "http://localhost:8080/tree"}},
-    {"name": "4. Subarbol", "request": {"method": "GET", "url": "http://localhost:8080/nodes/2/subtree"}},
-    {"name": "5. Ruta desde Raiz", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/path"}},
-    {"name": "6. Recorrido DFS", "request": {"method": "GET", "url": "http://localhost:8080/tree/traversal?type=DFS"}},
-    {"name": "7. Recorrido BFS", "request": {"method": "GET", "url": "http://localhost:8080/tree/traversal?type=BFS"}},
-    {"name": "8. Altura del Arbol", "request": {"method": "GET", "url": "http://localhost:8080/tree/height"}},
-    {"name": "9. Profundidad del Nodo", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/depth"}},
-    {"name": "10. Ancestros del Nodo", "request": {"method": "GET", "url": "http://localhost:8080/nodes/6/ancestors"}},
-    {"name": "11. Validar Ciclos", "request": {"method": "GET", "url": "http://localhost:8080/tree/validate"}}
+    {
+      "name": "1. Crear Raiz",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/nodes/root?id=1&value=Tienda",
+        "description": "Crea el nodo raíz del árbol. Solo puede existir un nodo raíz (sin parentId)."
+      }
+    },
+    {
+      "name": "2. Agregar Hijo",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/nodes/1/children?id=2&value=Electronica",
+        "description": "Agrega un nodo hijo al nodo con id=1. El hijo hereda el parentId del padre."
+      }
+    },
+    {
+      "name": "3. Arbol Completo",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/tree",
+        "description": "Retorna el árbol completo en formato JSON jerárquico con todos los nodos y sus hijos."
+      }
+    },
+    {
+      "name": "4. Subarbol",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/nodes/2/subtree",
+        "description": "Retorna el subárbol que parte desde el nodo con id=2, incluyendo todos sus descendientes."
+      }
+    },
+    {
+      "name": "5. Ruta desde Raiz",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/nodes/6/path",
+        "description": "Retorna la ruta completa desde la raíz hasta el nodo con id=6. Ejemplo: Tienda > Electrónica > Computadoras > Laptops."
+      }
+    },
+    {
+      "name": "6. Recorrido DFS",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/tree/traversal?type=DFS",
+        "description": "Recorre el árbol en profundidad (Depth First Search). Visita primero los hijos antes de los hermanos."
+      }
+    },
+    {
+      "name": "7. Recorrido BFS",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/tree/traversal?type=BFS",
+        "description": "Recorre el árbol por niveles (Breadth First Search). Visita todos los nodos de un nivel antes de bajar al siguiente."
+      }
+    },
+    {
+      "name": "8. Altura del Arbol",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/tree/height",
+        "description": "Retorna la altura total del árbol, es decir, el número de niveles desde la raíz hasta la hoja más profunda."
+      }
+    },
+    {
+      "name": "9. Profundidad del Nodo",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/nodes/6/depth",
+        "description": "Retorna la profundidad del nodo con id=6, contando cuántos ancestros tiene desde la raíz."
+      }
+    },
+    {
+      "name": "10. Ancestros del Nodo",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/nodes/6/ancestors",
+        "description": "Retorna la lista de todos los ancestros del nodo con id=6, desde su padre directo hasta la raíz."
+      }
+    },
+    {
+      "name": "11. Validar Ciclos",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/tree/validate",
+        "description": "Valida que el árbol no tenga ciclos. Retorna true si la estructura es válida, false si hay ciclos."
+      }
+    }
   ]
 }
