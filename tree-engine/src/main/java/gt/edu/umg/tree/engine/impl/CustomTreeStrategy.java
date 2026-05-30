@@ -12,7 +12,7 @@ import java.util.List;
         name = "app.tree-strategy",
         havingValue = "custom"
 )
-public class CollectionsTreeStrategy
+public class CustomTreeStrategy
         implements TreeAlgorithmStrategy<Object> {
 
     @Override
