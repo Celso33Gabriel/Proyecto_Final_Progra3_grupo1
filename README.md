@@ -1,4 +1,11 @@
 # Proyecto Final - Programacion 3 Grupo 1 UMG
+---
+
+## 📋 Gestión del Proyecto (Trello)
+Para la planificación de tareas, asignación de sprints y seguimiento de las funcionalidades del catálogo e-commerce, el equipo utiliza un tablero organizado en Trello.
+
+Puedes ver el avance de nuestras actividades haciendo clic en el siguiente enlace:
+🔗 **[Ir al Tablero de Trello del Grupo 1](https://trello.com/b/CBI2rMqT/proyectoprogra3a)**
 
 ## Sistema Gestor de Árboles de Categorías E-Commerce (Multi-módulo)
 
@@ -13,6 +20,7 @@ Celso Gabriel Sarceño Corado - Carné: 0905-24-4036 (Desarrollo de Arquitectura
 Mario David Tereta Sapalun - Carné:0905-15-***
 
 Luis Emilio Flores Castillo - Carné:0905-23-**
+
 
 ---
 
