@@ -68,7 +68,7 @@ public class CustomTreeStrategy  {
         System.out.println();
     }
 
-    // Altura del Árbol
+    // Altura del Arbol
     public int getAbsoluteHeight() {
         return calculateHeight(root);
     }

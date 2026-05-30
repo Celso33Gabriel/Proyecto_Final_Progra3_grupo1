@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Árboles</title>
+</head>
+<body>
+
+    <h1>Proyecto Final Programación III</h1>
+
+    <button onclick="cargarArbol()">Cargar Árbol</button>
+
+    <pre id="resultado"></pre>
+
+    <script>
+        function cargarArbol() {
+            fetch('/tree')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('resultado').textContent =
+                        JSON.stringify(data, null, 2);
+                });
+        }
+    </script>
+
+</body>
+</html>
