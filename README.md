@@ -15,11 +15,11 @@ Este proyecto es una aplicación empresarial desarrollada en **Java** utilizando
 El sistema permite organizar de forma jerárquica las categorías de productos (Categorías Raíz, Subcategorías y Productos Finales) y ejecutar algoritmos avanzados de recorrido, cálculo de niveles de profundidad y validación de integridad para evitar errores en la navegación de la tienda en línea.
 
 ## Desarrolladores / Colaboradores (Grupo 1)
-Celso Gabriel Sarceño Corado - Carné: 0905-24-4036 (Desarrollo de Arquitectura, JPA y Contrato OpenAPI)
+Celso Gabriel Sarceño Corado - Carné: 0905-24-4036
 
-Mario David Tereta Sapalun - Carné:0905-15-***
+Mario David Tereta Sapalun - Carné:0905-15-14297
 
-Luis Emilio Flores Castillo - Carné:0905-23-**
+Luis Emilio Flores Castillo - Carné:0905-23-13795
 
 
 ---
