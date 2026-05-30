@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomTreeStrategy implements TreeAlgorithmStrategy<Object> {
+//@Component
+//@ConditionalOnProperty(
+//        name = "app.tree-strategy",
+//      havingValue = "custom"
+//)
+//public class CustomTreeStrategy
+//        implements TreeAlgorithmStrategy<Object> {
 
     @Override
     public void createRoot(Object value) {

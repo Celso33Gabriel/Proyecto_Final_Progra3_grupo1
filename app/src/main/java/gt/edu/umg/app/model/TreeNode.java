@@ -3,9 +3,11 @@ package gt.edu.umg.app.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Entity
 @Table(name = "nodes")
+@Document(collection = "nodes")
 public class TreeNode {
 
     @Id

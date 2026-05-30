@@ -22,7 +22,8 @@ public class MemoryTreeRepository {
         } catch (NumberFormatException e) {
             customTree.insert(node.hashCode());
         }
-    } // <-- ESTA es la llave que cierra el método save() correctamente
+    }
+    //ESTA es la llave que cierra el metodo save() correctamente
 
     public Object findById(String id) {
         return storage.get(id);
@@ -31,12 +32,9 @@ public class MemoryTreeRepository {
     public Map<String, Object> findAll() {
         return storage;
     }
-
-    // =========================================================================
-    // 🚀 LÓGICA COMPLETA DEL ÁRBOL QUE FALTA (LO QUE TE PIDIÓ TU AMIGO)
-    // =========================================================================
-
-    public void ejecutarRecorridoDFS() {
+    
+    
+     public void ejecutarRecorridoDFS() {
         System.out.println("--- Ejecutando DFS (Profundidad) en Memoria ---");
         customTree.dfs();
     }
