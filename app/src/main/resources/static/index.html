@@ -1,27 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Proyecto Árboles</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechStore Manager</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#eef2f7;color:#2c3e50;padding:30px}
+.container{max-width:1200px;margin:auto}
+.header{background:white;padding:25px;border-radius:15px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:25px;text-align:center}
+.header h1{margin-bottom:10px}
+.header p{color:#5d6d7e;margin-top:5px}
+.dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:25px}
+.stat-card,.card,.resultado{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.stat-card{text-align:center}
+.stat-card h3{color:#3498db}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card h2{margin-bottom:15px}
+input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #d6dbe1;border-radius:8px}
+button{border:none;background:#3498db;color:white;padding:10px 15px;border-radius:8px;cursor:pointer;margin:5px 5px 0 0}
+button:hover{background:#2980b9}
+.resultado{margin-top:25px}
+pre{background:#f7f8fa;padding:15px;border-radius:8px;min-height:250px;overflow:auto;white-space:pre-wrap}
+.footer{text-align:center;margin-top:25px;color:#7f8c8d}
+</style>
 </head>
 <body>
+<div class="container">
+<div class="header">
+<h1>🛒 TechStore Manager</h1>
+<p>Gestión de Categorías E‑Commerce</p>
+<p>Proyecto Final Programación III - Grupo 1</p>
+</div>
 
-    <h1>Proyecto Final Programación III</h1>
+<div class="dashboard">
+<div class="stat-card"><h3>📂 Categorías</h3><p>Administración jerárquica</p></div>
+<div class="stat-card"><h3>🗂 Subcategorías</h3><p>Estructura multinivel</p></div>
+<div class="stat-card"><h3>🔎 Consultas</h3><p>Búsqueda y análisis</p></div>
+</div>
 
-    <button onclick="cargarArbol()">Cargar Árbol</button>
+<div class="grid">
+<div class="card">
+<h2>📁 Nueva Categoría Principal</h2>
+<input type="text" id="rootId" placeholder="Código de Categoría">
+<input type="text" id="rootValue" placeholder="Nombre de Categoría">
+<button onclick="crearRaiz()">Crear Categoría</button>
+</div>
 
-    <pre id="resultado"></pre>
+<div class="card">
+<h2>📂 Nueva Subcategoría</h2>
+<input type="text" id="parentId" placeholder="Código Categoría Padre">
+<input type="text" id="childId" placeholder="Código Subcategoría">
+<input type="text" id="childValue" placeholder="Nombre de Subcategoría">
+<button onclick="agregarHijo()">Agregar Subcategoría</button>
+</div>
 
-    <script>
-        function cargarArbol() {
-            fetch('/tree')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('resultado').textContent =
-                        JSON.stringify(data, null, 2);
-                });
-        }
-    </script>
+<div class="card">
+<h2>🔎 Consultar Categorías</h2>
+<input type="text" id="queryId" placeholder="Código de Categoría">
+<button onclick="consultarSubtree()">Ver Categoría</button>
+<button onclick="consultarDepth()">Profundidad</button>
+<button onclick="consultarAncestors()">Ancestros</button>
+</div>
 
+<div class="card">
+<h2>📊 Catálogo General</h2>
+<button onclick="cargarArbol()">Cargar Catálogo</button>
+</div>
+</div>
+
+<div class="resultado">
+<h2>Resultado</h2>
+<pre id="resultado">Bienvenido a TechStore Manager
+
+Electrónica
+├── Computadoras
+│   ├── Laptops
+│   └── Desktop
+└── Accesorios</pre>
+</div>
+
+<div class="footer">
+Programación III • Grupo 1 • Categorías E‑Commerce
+</div>
+</div>
+
+<script>
+function mostrar(data){
+ document.getElementById("resultado").textContent =
+ typeof data==="string"?data:JSON.stringify(data,null,2);
+}
+function cargarArbol(){
+ fetch('/tree').then(r=>r.json()).then(mostrar).catch(e=>mostrar("Error: "+e));
+}
+function crearRaiz(){
+ let id=document.getElementById("rootId").value;
+ let value=document.getElementById("rootValue").value;
+ fetch(`/nodes/root?id=${id}&value=${value}`,{method:'POST'})
+ .then(()=>mostrar("✅ Categoría creada correctamente"));
+}
+function agregarHijo(){
+ let parentId=document.getElementById("parentId").value;
+ let id=document.getElementById("childId").value;
+ let value=document.getElementById("childValue").value;
+ fetch(`/nodes/${parentId}/children?id=${id}&value=${value}`,{method:'POST'})
+ .then(()=>mostrar("✅ Subcategoría agregada correctamente"));
+}
+function consultarSubtree(){
+ let id=document.getElementById("queryId").value;
+ fetch(`/nodes/${id}/subtree`).then(r=>r.json()).then(mostrar);
+}
+function consultarDepth(){
+ let id=document.getElementById("queryId").value;
+ fetch(`/nodes/${id}/depth`).then(r=>r.text()).then(d=>mostrar("Profundidad: "+d));
+}
+function consultarAncestors(){
+ let id=document.getElementById("queryId").value;
+ fetch(`/nodes/${id}/ancestors`).then(r=>r.json()).then(mostrar);
+}
+</script>
 </body>
 </html>
